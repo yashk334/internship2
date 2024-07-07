@@ -1,0 +1,64 @@
+Handwritten Digit Prediction Project
+Objective
+To predict handwritten digits (0-9) using a machine learning model.
+
+Data Source
+The dataset used is the popular MNIST dataset, which can be accessed via the sklearn library.
+
+Import Library
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+
+Import Data
+digits = load_digits()
+X = digits.data
+y = digits.target
+
+Describe Data
+print(digits.DESCR)
+pd.DataFrame(X).head()
+pd.Series(y).value_counts()
+
+Data Visualization
+Visualizing some of the digits:
+plt.figure(figsize=(10, 4))
+for index, (image, label) in enumerate(zip(digits.images[0:5], digits.target[0:5])):
+    plt.subplot(1, 5, index + 1)
+    plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
+    plt.title('Label: %i' % label)
+plt.show()
+Data Preprocessing
+The data is already preprocessed since it is part of the sklearn dataset.
+
+Define Target Variable (y) and Feature Variables (X)
+# X and y are already defined in the Import Data section
+
+Train Test Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+Modeling
+model = LogisticRegression(max_iter=5000, solver='lbfgs', multi_class='auto')
+model.fit(X_train, y_train)
+
+Model Evaluation
+y_pred = model.predict(X_test)
+print(confusion_matrix(y_test, y_pred))
+print(accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+Prediction
+# Predict a single digit
+sample_digit = X_test[0].reshape(1, -1)
+predicted_digit = model.predict(sample_digit)
+print(f'Predicted digit: {predicted_digit[0]}')
+
+Explanation
+The logistic regression model was trained on 70% of the dataset and tested on the remaining 30%.
+The model achieved high accuracy, demonstrating its effectiveness in recognizing handwritten digits. 
+The confusion matrix and classification report provide detailed insights into the model's performance across different digit classes.
